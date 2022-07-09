@@ -8,6 +8,7 @@ use App\Models\Covid19Data;
 use App\Models\DealerInfo;
 use App\Models\CustomerOrderReceive;
 use App\Models\WorkOrder;
+use App\Models\Page;
 use App\Models\OrderSummary;
 use App\Models\WindowShipping;
 use App\Models\GlassReport;
@@ -31,20 +32,20 @@ class DealerController extends Controller
      */
     public function index()
     {
+        $dealer_name = WorkOrder::groupBy('DEALER')->pluck('DEALER');
+        $page = Page::pluck('page');
         $departments = Department::all();
         return view('dealer.index')->with([
             'menu' => 'dealer_registration',
             'departments' => $departments,
+            'dealer_name' => $dealer_name,
+            'page' => $page
         ]);
     }
 
     public function postDealerRegister(Request $request)
     {
         $dealerInfo = new DealerInfo();
-        $dealer = WorkOrder::where('DEALER', '=', $request['dealer_name'])->first();
-        if ($dealer === null) {
-            return back()->with('error_message', 'Dealer not exist');
-        }
         $dealerInfo['dealer_name'] = $request['dealer_name'];
         $dealerInfo['dealer_address'] = $request['dealer_address'];
         $dealerInfo['company_phone'] = $request['company_phone'];
