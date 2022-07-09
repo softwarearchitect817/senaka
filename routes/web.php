@@ -94,6 +94,22 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::get('covid-19-data', 'Covid19DataController@index')->name('covid-19-data.index');
     });
 
+
+    Route::group(['middleware' => 'access:' . Page::PAGES["dealer_registration"]], function () {
+        Route::get('dealer-registration', 'DealerController@index')->name('dealer.registration');
+        Route::post('post-dealer-registration', 'DealerController@postDealerRegister')->name('post-dealer-registration');
+    });
+
+    Route::group(['middleware' => 'access:' . Page::PAGES["dealer"]], function () {
+        Route::get('dealer', 'DealerController@dealer_login')->name('dealer.login');
+        Route::post('post-dealer-login', 'DealerController@postDealerLogin')->name('post-dealer-login');
+    });
+
+    Route::group(['middleware' => 'access:' . Page::PAGES["dealer_info"]], function () {
+        Route::get('dealer-info', 'DealerController@dealer_info')->name('dealer.info');
+        Route::post('post-receive-order', 'DealerController@postReceiveOrder')->name('post-receive-order');
+    });
+
     Route::group([  'middleware' => 'access:' . Page::PAGES["departments"]], function () {
         Route::resource('department', 'DepartmentController');
     });
