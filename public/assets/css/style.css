@@ -1,0 +1,116 @@
+.navbar.navbar-dark {
+    background-color: #171113!important;
+}
+
+.navbar.navbar-dark .navbar-brand img {
+    width: 100px;
+}
+
+.navbar-dark .navbar-nav .nav-item:hover {
+    background-color: #3a3a3a;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.navbar-dark .navbar-nav .active>.nav-link,
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link.show,
+.navbar-dark .navbar-nav .show>.nav-link {
+    color: #b2beb5;
+}
+
+.bg-gray, .bg-grey {
+    background-color: grey !important;
+}
+
+.bg-gray-light, .bg-grey-light {
+    background-color: lightgrey !important;
+}
+
+.has-error input.form-control, .has-error select.form-control, .has-error .input-group-append.input-group-text {
+    border-color: #ef4605;
+}
+
+.error {
+    color: #ef4605;
+}
+
+.required {
+    color: red;
+}
+
+.navbar-nav .sub-menu {
+    list-style: none;
+    background-color: #171113;
+    padding-inline-start: 0;
+    z-index: 3;
+}
+
+@media (min-width: 768px) {
+    .navbar-nav .sub-menu {
+        position: absolute;
+        display: none;
+    }
+
+    .navbar-nav .nav-item:hover .sub-menu {
+        display: block;
+    }
+}
+
+.navbar-nav .sub-menu .sub-menu-item .nav-link {
+    padding: 7px 35px;
+}
+
+.navbar-nav .sub-menu .sub-menu-item .nav-link:hover {
+    background-color: #515151;
+}
+
+#rack-info.table.table-bordered {
+    border: none;
+    overflow-y: hidden;
+}
+
+#rack-info.table tbody td {
+    padding: 5px;
+}
+
+#rack-info.table tbody:first-child td {
+    border-top: none;
+}
+
+#rack-info.table tbody tr:nth-child(even) td {
+    border-bottom: none;
+}
+
+#rack-info.table tbody tr:last-child td {
+    border-top: none;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#rack-info.table tbody td:nth-child(odd) {
+    border-right: none;
+}
+
+#rack-info.table tbody td:nth-child(even) {
+    border-left: none;
+}
+
+#rack-info.table tbody td.rack_name {
+    padding-top: 0;
+}
+
+#rack-info.table tbody td.rack_name:nth-child(even) {
+    text-align: right;
+}
+
+div.rack {
+    position: relative;
+    padding: 90px 20px;
+}
+
+div.rack:hover .tooltip {
+    width: max-content;
+    opacity: 1;
+}
