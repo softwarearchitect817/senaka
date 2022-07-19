@@ -147,8 +147,10 @@
                             that.stocks = data.orders.map((order => {
                                 order['line'] = order['LINE #1'];
                                 order['window'] = order['WINDOW DESCRIPTION'];
-                                if (order['location'] !== 'No')
+                                if (order['location'] !== 'No') {
+                                    order['date'] = order['date'] + ' ' + order['time'];
                                     order['shipped'] = 'YES'
+                                }
                                 return order;
                             }));
                             that.match = data.match;
