@@ -84,6 +84,12 @@
                     </li>
                 @endif
 
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.order_search'))->first())
+                    <li class="nav-item @if ($menu == 'order_search') active @endif">
+                        <a class="nav-link" href="{{ route('order-search') }}">Order Search</a>
+                    </li>
+                @endif
+
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.stock_window'))->first())
                     <li class="nav-item @if ($menu == 'stock') active @endif">
@@ -199,13 +205,17 @@
                 @endif
 
 
-                <!-- @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.covid_19_data'))->first())
--->
-                <li class="nav-item @if ($menu == 'dealer_registration') active @endif">
-                    <a class="nav-link" href="{{ route('dealer.registration') }}">Dealer Registration</a>
-                </li>
-                <!--
-@endif -->
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.dealer_registration'))->first())
+                    <li class="nav-item @if ($menu == 'dealer_registration') active @endif">
+                        <a class="nav-link" href="{{ route('dealer.registration') }}">Dealer Registration</a>
+                    </li>
+                @endif
+
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.dealers'))->first())
+                    <li class="nav-item @if ($menu == 'dealers') active @endif">
+                        <a class="nav-link" href="{{ route('dealers.index') }}">Dealers</a>
+                    </li>
+                @endif
 
 
 

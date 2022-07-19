@@ -1,7 +1,6 @@
 @extends('master')
 
 @section('style')
-
     <style>
         .stock_count span {
             padding-top: 20px;
@@ -10,9 +9,7 @@
             display: inline-block;
             margin-top: 20px;
         }
-
     </style>
-
 @endsection
 
 @section('content')
@@ -34,8 +31,8 @@
                     <button class="btn btn-dark w-50" @click.prevent="searchWindow">Search</button>
                 </div>
             </div>
-            <div class="alert alert-danger mt-3" :class="{'d-none' : result_error == ''}">Not found</div>
-            <div class="row mt-5" :class="{'d-none' : disabled_request}">
+            <div class="alert alert-danger mt-3" :class="{ 'd-none': result_error == '' }">Not found</div>
+            <div class="row mt-5" :class="{ 'd-none': disabled_request }">
                 <table class="table-responsive border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                     <tr>
                         <td>TOTAL WINDOW</td>
@@ -72,7 +69,8 @@
                                 style="background-color: #22B14C" class="w-50">
                             </span>
 
-                            <span v-text="total_qty + '/' + available" v-else style="background-color: #FF7F27" class="w-50"></span>
+                            <span v-text="total_qty + '/' + available" v-else style="background-color: #FF7F27"
+                                class="w-50"></span>
                         </div>
                     </div>
 
@@ -123,6 +121,7 @@
                         item_number: this.item_number
                     };
                     $.post('{{ route('search-window') }}', param, function(data) {
+                        console.log(data);
                         if (data.stocks.length > 0) {
                             that.stocks = data.stocks;
                             that.searched_number = that.item_number;

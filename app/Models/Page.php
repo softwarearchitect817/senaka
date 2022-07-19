@@ -25,7 +25,9 @@ class Page extends Model
         "complete_order" => 15,
         "dealer_registration" => 16,
         "dealer" => 17,
-        "dealer_info" => 18
+        "dealer_info" => 18,
+        "dealers" => 19,
+        "order_search" => 20
     ];
 
     protected $guarded = [

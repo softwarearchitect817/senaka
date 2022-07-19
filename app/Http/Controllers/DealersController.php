@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use App\User;
+use App\Models\DealerInfo;
+use App\Models\WorkOrder;
 use App\Models\Page;
 use App\Models\Department;
 use Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class DealersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +22,77 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user()->load(["pagesAccess"]);
-        $users = User::with(['pagesAccess','landing'])->get();
-        return view('users.index')->with([
-            'menu' => 'users',
-            'users' => $users,
+        $dealers = DealerInfo::all();
+        return view('dealers.index')->with([
+            'menu' => 'dealers',
+            'dealers' => $dealers,
             'user' => $user
         ]);
+    }
+
+    public function edit($id)
+    {
+        $user = Auth::user()->load(["pagesAccess"]);
+        $edit = DealerInfo::whereId($id)->first();
+        $dealer_name = WorkOrder::groupBy('DEALER')->pluck('DEALER');
+        $page = Page::pluck('page');
+        $pages = Page::all();
+        $departments = Department::all();
+        $access = array();
+        // foreach ($edit->pagesAccess as $page) {
+        //     array_push($access, $page->id);
+        // }
+        // dd($edit);
+        return view('dealers.edit')->with([
+            'menu' => 'dealers',
+            'edit' => $edit,
+            'dealer_name' => $dealer_name,
+            'page' => $page,
+            'access' => $access,
+            'user' => $user,
+            'pages' => $pages,
+            'departments' => $departments,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // $rule = [
+        //     "password" => "nullable|confirmed",
+        //     "access" => "required|array",
+        //     "first_name" => "required|string",
+        //     "last_name" => "required|string",
+        //     "username" => "required|string|unique:users,username,".$id,
+        //     "landing_page" => "required|numeric",
+            
+        //     "phone" => "nullable|string",
+        //     "email" => "nullable|email|unique:users,email,".$id,
+        //     "emp_id" => "nullable|string",
+        //     "mailing_address" => "nullable|string",
+        //     "affiliated_to" => "nullable|in:vinyl-pro,agency,vinyl-pro office",
+        //     "department" => "nullable|numeric|exists:departments,id",
+        // ];
+        // $validator = Validator::make($request->all(), $rule);
+        // if ($validator->fails())
+        //     return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
+        $dealerInfo = DealerInfo::find($id);
+
+        $dealerInfo['dealer_name'] = $request['dealer_name'];
+        $dealerInfo['dealer_address'] = $request['dealer_address'];
+        $dealerInfo['company_phone'] = $request['company_phone'];
+        $dealerInfo['cell_phone'] = $request['cell_phone'];
+        $dealerInfo['dealer_email'] = $request['dealer_email'];
+        $dealerInfo['dealer_username'] = $request['dealer_username'];
+        $dealerInfo['dealer_password'] = $request['dealer_password'];
+        $dealerInfo['landing_page'] = $request['landing_page'];
+        $dealerInfo['page_access'] = $request['page_access'];
+
+        $date = explode("/", $request['show_record_date']);
+        $dealerInfo['show_record_date'] = $date[2].$date[0].$date[1];
+        $dealerInfo->save();    
+        
+        $request->session()->flash("info_message", "Dealer information has been Edited successfully.");
+        return redirect()->route('dealers.index');
     }
 
     /**
@@ -110,26 +177,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        $user = Auth::user()->load(["pagesAccess"]);
-        $edit = User::with('pagesAccess')->whereId($id)->first();
-        $pages = Page::all();
-        $departments = Department::all();
-        $access = array();
-        foreach ($edit->pagesAccess as $page) {
-            array_push($access, $page->id);
-        }
-
-        return view('users.edit')->with([
-            'menu' => 'user',
-            'edit' => $edit,
-            'access' => $access,
-            'user' => $user,
-            'pages' => $pages,
-            'departments' => $departments,
-        ]);
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -138,64 +186,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $rule = [
-            "password" => "nullable|confirmed",
-            "access" => "required|array",
-            "first_name" => "required|string",
-            "last_name" => "required|string",
-            "username" => "required|string|unique:users,username,".$id,
-            "landing_page" => "required|numeric",
-            
-            "phone" => "nullable|string",
-            "email" => "nullable|email|unique:users,email,".$id,
-            "emp_id" => "nullable|string",
-            "mailing_address" => "nullable|string",
-            "affiliated_to" => "nullable|in:vinyl-pro,agency,vinyl-pro office",
-            "department" => "nullable|numeric|exists:departments,id",
-        ];
-        $validator = Validator::make($request->all(), $rule);
-        if ($validator->fails())
-            return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
-        $user = User::find($id);
-
-        if(!empty($request->password)){
-            if($request->password != $request->password_confirmation){
-                return back()->withErrors()->withInput()->with('error_message', 'Password confirmation filed is required.');
-            }
-            $user->password = Hash::make($request->password);
-        }
-
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->username = $request->username;
-        $user->landing_page = $request->landing_page;
-
-        if($request->has("phone") && !empty($request->phone) ){
-            $user->phone = $request->phone;
-        }
-        if($request->has("email") && !empty($request->email)){
-            $user->email = $request->email;
-        }
-        if($request->has("emp_id") && !empty($request->emp_id) ){
-            $user->emp_id = $request->emp_id;
-        }
-        if($request->has("mailing_address") && !empty($request->mailing_address)){
-            $user->mailing_address = $request->mailing_address;
-        }
-        if($request->has("affiliated_to") && !empty($request->affiliated_to) ){
-            $user->affiliated_to = $request->affiliated_to;
-        }
-        if($request->has("department") && !empty($request->department)){
-            $user->department_id = $request->department;
-        }
-        $user->save();
-
-        $user->pagesAccess()->sync($request->access);
-        $request->session()->flash("info_message","User has been Edited successfully.");
-        return redirect()->route('user.index');
-    }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -205,7 +196,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        Dealerinfo::find($id)->delete();
         return redirect()->back();
     }
 }

@@ -29,7 +29,11 @@ Route::group(['middleware' => ["auth"]], function () {
     Route::group(['middleware' => 'access:' . Page::PAGES["search_window"]], function () {
         Route::get('search-window', 'HomeController@searchWindow')->name('search-window');
         Route::post('search-window', 'HomeController@postSearchWindow');
+    });
 
+    Route::group(['middleware' => 'access:' . Page::PAGES["order_search"]], function () {
+        Route::get('order-search', 'HomeController@searchOrder')->name('order-search');
+        Route::post('order-search', 'HomeController@postSearchOrder');
     });
 
     Route::group(['middleware' => 'access:' . Page::PAGES["stock_window"]], function () {
@@ -108,6 +112,10 @@ Route::group(['middleware' => ["auth"]], function () {
     Route::group(['middleware' => 'access:' . Page::PAGES["dealer_info"]], function () {
         Route::get('dealer-info', 'DealerController@dealer_info')->name('dealer.info');
         Route::post('post-receive-order', 'DealerController@postReceiveOrder')->name('post-receive-order');
+    });
+
+    Route::group([  'middleware' => 'access:' . Page::PAGES["dealers"]], function () {
+        Route::resource('dealers', 'DealersController');
     });
 
     Route::group([  'middleware' => 'access:' . Page::PAGES["departments"]], function () {

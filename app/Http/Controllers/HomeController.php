@@ -154,6 +154,45 @@ class HomeController extends Controller
         ]);
     }
 
+    public function searchOrder()
+    {
+        return view('order-search')->with([
+            'menu' => 'order_search',
+        ]);
+    }
+
+    public function postSearchOrder(Request $request)
+    {
+        $order_number = $request['order_number'];
+        $orders = WorkOrder::where('ORDER #', '=', $order_number)->get();
+        $match = $orders[0];
+        
+        foreach ($orders as $row){
+            $row['location'] = 'No';
+            $windowshipping = WindowShipping::where('Line_number', '=', $row['LINE #1'])->first();
+            if ($windowshipping !== null) {
+                $row['location'] = $windowshipping['Reference'];
+                $row['date'] = $windowshipping['Date'];
+                $row['time'] = $windowshipping['Time'];
+                $row['wrapper'] = $windowshipping['Id'];
+            }
+        }
+        // $stocks = Stock::where('item_number', $item_number)
+        //     ->orWhere('item_number', 'like', $item_number . '-%')
+        //     ->groupBy('rack_number')
+        //     ->select(['*', DB::raw('COUNT(rack_number) as qty')])
+        //     ->get();
+        // foreach ($stocks as $stock) {
+        //     $stock['aisle'] = substr($stock['rack_number'], 0, 1);
+        //     $stock['rack_number'] = substr($stock['rack_number'], 1);
+        // }
+        return response([
+            // 'stocks' => $stocks,
+            'orders' => $orders,
+            'match' => $match,
+        ]);
+    }
+
     public function postUploadRequest(Request $request)
     {
         $rule = [
