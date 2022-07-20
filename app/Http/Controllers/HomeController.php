@@ -169,12 +169,16 @@ class HomeController extends Controller
         
         foreach ($orders as $row){
             $row['location'] = 'No';
+            $stock = Stock::where('item_number', '=', $row['LINE #1'])->first();
+            if ($stock !== null) {
+                $row['location'] = $stock['rack_number'];
+                $row['time'] = $stock['created_at'];
+                $row['wrapper'] = $stock['name'];
+            }
+            // $row['shipped'] = 'No';
             $windowshipping = WindowShipping::where('Line_number', '=', $row['LINE #1'])->first();
             if ($windowshipping !== null) {
-                $row['location'] = $windowshipping['Reference'];
-                $row['date'] = $windowshipping['Date'];
-                $row['time'] = $windowshipping['Time'];
-                $row['wrapper'] = $windowshipping['Id'];
+                $row['shipped'] = 'YES';
             }
         }
         // $stocks = Stock::where('item_number', $item_number)

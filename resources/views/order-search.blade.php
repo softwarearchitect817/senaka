@@ -36,7 +36,7 @@
                 <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                     <tr>
                         <td>Order number:</td>
-                        <td v-text="order_number"></td>
+                        <td v-text="searched_number"></td>
                         <td></td>
                         <td>Company Name:</td>
                         <td v-text="company_name"></td>
@@ -65,7 +65,7 @@
                                 <td v-text="stock.location"
                                     v-bind:style="{ background: stock.location=='No'?'red':'green' }">
                                 </td>
-                                <td v-text="stock.date"></td>
+                                <td v-text="stock.time"></td>
                                 <td v-text="stock.wrapper"></td>
                                 <td class="text-success" v-text="stock.shipped"></td>
                             </tr>
@@ -138,6 +138,7 @@
                         this.error = 'please input item number';
                         return;
                     }
+                    this.searched_number = this.order_number;
                     var that = this;
                     var param = {
                         order_number: this.order_number
@@ -147,14 +148,10 @@
                             that.stocks = data.orders.map((order => {
                                 order['line'] = order['LINE #1'];
                                 order['window'] = order['WINDOW DESCRIPTION'];
-                                if (order['location'] !== 'No') {
-                                    order['date'] = order['date'] + ' ' + order['time'];
-                                    order['shipped'] = 'YES'
-                                }
                                 return order;
                             }));
                             that.match = data.match;
-                            that.searched_number = that.order_number;
+                            // that.searched_number = that.order_number;
                             that.disabled_request = false;
                             that.result_error = '';
                             that.available = data.total_available;
@@ -163,6 +160,7 @@
                             that.result_error = 'Not Found';
                         }
                     });
+                    this.order_number = '';
                 },
             },
             mounted: function() {}
