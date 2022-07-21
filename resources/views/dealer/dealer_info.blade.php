@@ -4,7 +4,7 @@
     <div class="container my-5">
         <div class="row mt-5">
             <div class="col-12">
-                <h3>Dealer Name: {{ $dealer }}</h3>
+                <h3>{{ $dealer }}</h3>
             </div>
         </div>
 

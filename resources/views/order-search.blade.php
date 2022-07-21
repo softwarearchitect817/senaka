@@ -53,7 +53,8 @@
                                 <th>Item number</th>
                                 <th>Window Description</th>
                                 <th>Location</th>
-                                <th>Date & Time</th>
+                                <th>Date</th>
+                                <th>Time</th>
                                 <th>Wrapper ID</th>
                                 <th>Shipped</th>
                             </tr>
@@ -65,6 +66,7 @@
                                 <td v-text="stock.location"
                                     v-bind:style="{ background: stock.location=='No'?'red':'green' }">
                                 </td>
+                                <td v-text="stock.date"></td>
                                 <td v-text="stock.time"></td>
                                 <td v-text="stock.wrapper"></td>
                                 <td class="text-success" v-text="stock.shipped"></td>
@@ -148,10 +150,14 @@
                             that.stocks = data.orders.map((order => {
                                 order['line'] = order['LINE #1'];
                                 order['window'] = order['WINDOW DESCRIPTION'];
+                                let fields1 = order['created_at'].split(' ');
+                                order['date'] = fields1[0];
+                                order['time'] = fields1[1];
+                                let fields2 = order['wrapper'].split('(');
+                                order['wrapper'] = fields2[0];
                                 return order;
                             }));
                             that.match = data.match;
-                            // that.searched_number = that.order_number;
                             that.disabled_request = false;
                             that.result_error = '';
                             that.available = data.total_available;

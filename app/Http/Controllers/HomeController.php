@@ -172,7 +172,7 @@ class HomeController extends Controller
             $stock = Stock::where('item_number', '=', $row['LINE #1'])->first();
             if ($stock !== null) {
                 $row['location'] = $stock['rack_number'];
-                $row['time'] = $stock['created_at'];
+                $row['created_at'] = $stock['created_at'];
                 $row['wrapper'] = $stock['name'];
             }
             // $row['shipped'] = 'No';
