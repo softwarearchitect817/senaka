@@ -165,8 +165,6 @@ class HomeController extends Controller
     {
         $order_number = $request['order_number'];
         $orders = WorkOrder::where('ORDER #', '=', $order_number)->get();
-        $match = $orders[0];
-        
         foreach ($orders as $row){
             $row['location'] = 'No';
             $stock = Stock::where('item_number', '=', $row['LINE #1'])->first();
@@ -174,6 +172,7 @@ class HomeController extends Controller
                 $row['location'] = $stock['rack_number'];
                 $row['created_at'] = $stock['created_at'];
                 $row['wrapper'] = $stock['name'];
+                $row['note'] = $stock['note'];
             }
             // $row['shipped'] = 'No';
             $windowshipping = WindowShipping::where('Line_number', '=', $row['LINE #1'])->first();
@@ -181,17 +180,19 @@ class HomeController extends Controller
                 $row['shipped'] = 'YES';
             }
         }
-        // $stocks = Stock::where('item_number', $item_number)
-        //     ->orWhere('item_number', 'like', $item_number . '-%')
-        //     ->groupBy('rack_number')
-        //     ->select(['*', DB::raw('COUNT(rack_number) as qty')])
-        //     ->get();
-        // foreach ($stocks as $stock) {
-        //     $stock['aisle'] = substr($stock['rack_number'], 0, 1);
-        //     $stock['rack_number'] = substr($stock['rack_number'], 1);
-        // }
+
+        $match=[];
+        if( count($orders) > 0){
+            $match = $orders[0];
+            foreach ($orders as $row){
+                if($row['note']!==null){
+                    $match['note']=$row['note'];
+                    break;
+                }
+            }
+        }
+       
         return response([
-            // 'stocks' => $stocks,
             'orders' => $orders,
             'match' => $match,
         ]);

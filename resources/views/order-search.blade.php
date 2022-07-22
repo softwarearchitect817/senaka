@@ -35,6 +35,10 @@
             <div class="row mt-5" :class="{ 'd-none': disabled_request }">
                 <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                     <tr>
+                        <td>Note:</td>
+                        <td v-text="note"></td>
+                    </tr>
+                    <tr>
                         <td>Order number:</td>
                         <td v-text="searched_number"></td>
                         <td></td>
@@ -115,6 +119,9 @@
                 available: ''
             },
             computed: {
+                note: function() {
+                    return this.match.note;
+                },
                 company_name: function() {
                     return this.match.DEALER;
                 },
@@ -147,14 +154,19 @@
                     };
                     $.post('{{ route('order-search') }}', param, function(data) {
                         if (data.orders.length > 0) {
+                            console.log(data.match);
                             that.stocks = data.orders.map((order => {
                                 order['line'] = order['LINE #1'];
                                 order['window'] = order['WINDOW DESCRIPTION'];
-                                let fields1 = order['created_at'].split(' ');
-                                order['date'] = fields1[0];
-                                order['time'] = fields1[1];
-                                let fields2 = order['wrapper'].split('(');
-                                order['wrapper'] = fields2[0];
+                                if (order['created_at']) {
+                                    let fields1 = order['created_at'].split(' ');
+                                    order['date'] = fields1[0];
+                                    order['time'] = fields1[1];
+                                }
+                                if (order['wrapper']) {
+                                    let fields2 = order['wrapper'].split('(');
+                                    order['wrapper'] = fields2[0];
+                                }
                                 return order;
                             }));
                             that.match = data.match;

@@ -121,7 +121,6 @@
                         item_number: this.item_number
                     };
                     $.post('{{ route('search-window') }}', param, function(data) {
-                        console.log(data);
                         if (data.stocks.length > 0) {
                             that.stocks = data.stocks;
                             that.searched_number = that.item_number;

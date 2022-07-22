@@ -62,9 +62,8 @@
                                 </td> --}}
                                 <td>
 
-                                    <form id="logout-form-1"
-                                        action="{{ route('dealers.destroy', ['dealer' => $row->id]) }}" method="POST"
-                                        style="display: inline">
+                                    <form id="logout-form" action="{{ route('dealers.destroy', ['dealer' => $row->id]) }}"
+                                        method="POST" style="display: inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"> Delete </button>
