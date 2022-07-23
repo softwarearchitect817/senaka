@@ -28,6 +28,34 @@
                 {{-- <div class="text-right"> <a class="btn btn-dark text-light" href="{{ route('user.create') }}"> Add
                         User</a> </div> --}}
                 <div class="row mt-5">
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="proCheck" value="option1">
+                            <label class="form-check-label" for="proCheck">Processing</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="inProCheck" value="option2">
+                            <label class="form-check-label" for="inProCheck">In Production</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="assemCheck" value="option3">
+                            <label class="form-check-label" for="assemCheck">Assemble start</label>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="shipCheck" value="option4">
+                            <label class="form-check-label" for="shipCheck">Ready to ship</label>
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="row mt-5">
                     <div class="col-12">
                         <table id="dealer-data-1" class="table table-bordered table-striped">
                             <thead>
@@ -195,5 +223,50 @@
                 [10, 50, 100, 250, 500, "All"]
             ]
         });
+
+        $("#proCheck").change(function(e, f) {
+            let rows = $("#dealer-data-1 tbody tr");
+            let display = 'table-row';
+            if (this.checked) {
+                display = 'none';
+            }
+            for (let row of rows) {
+                if (!row.children[2].children.length) row.style.display = display;
+            }
+        })
+
+        $("#inProCheck").change(function(e, f) {
+            let rows = $("#dealer-data-1 tbody tr");
+            let display = 'table-row';
+            if (this.checked) {
+                display = 'none';
+            }
+            for (let row of rows) {
+                if (!row.children[3].children.length) row.style.display = display;
+            }
+        })
+
+        $("#assemCheck").change(function(e, f) {
+            let rows = $("#dealer-data-1 tbody tr");
+            let display = 'table-row';
+            if (this.checked) {
+                display = 'none';
+            }
+            for (let row of rows) {
+                if (!row.children[4].children.length) row.style.display = display;
+            }
+        })
+
+        $("#shipCheck").change(function(e, f) {
+            let rows = $("#dealer-data-1 tbody tr");
+            let display = 'table-row';
+            if (this.checked) {
+                display = 'none';
+            }
+            for (let row of rows) {
+                if (!row.children[5].classList.contains('bg-success'))
+                    row.style.display = display;
+            }
+        })
     </script>
 @endsection
